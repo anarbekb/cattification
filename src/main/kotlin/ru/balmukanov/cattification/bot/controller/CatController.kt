@@ -13,11 +13,11 @@ import ru.balmukanov.cattification.config.property.BotProperty
 class CatController(private val botProperty: BotProperty) : TelegramMvcController {
 
     override fun getToken(): String {
-        return botProperty.token;
+        return botProperty.token
     }
 
     @BotRequest(value = ["/meow"], type = [MessageType.CALLBACK_QUERY, MessageType.MESSAGE])
     fun meow(user: User, chat: Chat): SendMessage {
-        return SendMessage(chat.id(), "Meow");
+        return SendMessage(chat.id(), "Meow")
     }
 }
