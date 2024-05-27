@@ -13,48 +13,56 @@ import kotlin.math.abs
 @Service
 class ScheduleNotification(private val botProperty: BotProperty, private val catProperty: CatProperty) {
 
-    @Scheduled(cron = "0 8 * * * ?")
+    @Scheduled(cron = "0 8 * * * ?", zone = "PLT")
     fun scheduledBreakfast() {
-        val bot = TelegramBot(botProperty.token);
-        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0;
-        bot.execute(SendMessage(320416029L, "Завтрак: $roundGrams граммов"));
+        val bot = TelegramBot(botProperty.token)
+        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0
+        bot.execute(SendMessage(320416029L, "Завтрак: $roundGrams граммов"))
     }
 
-    @Scheduled(cron = "0 14 * * * ?")
+    @Scheduled(cron = "0 14 * * * ?", zone = "PLT")
     fun scheduledDinner() {
-        val bot = TelegramBot(botProperty.token);
-        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0;
-        bot.execute(SendMessage(320416029L, "Обед: $roundGrams граммов"));
+        val bot = TelegramBot(botProperty.token)
+        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0
+        botProperty.notificationUsers.forEach { user ->
+            bot.execute(SendMessage(user, "Обед: $roundGrams граммов"))
+        }
     }
 
-    @Scheduled(cron = "0 20 * * * ?")
+    @Scheduled(cron = "0 20 * * * ?", zone = "PLT")
     fun scheduledLunch() {
-        val bot = TelegramBot(botProperty.token);
-        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0;
-        bot.execute(SendMessage(320416029L, "Ужин: $roundGrams граммов"));
+        val bot = TelegramBot(botProperty.token)
+        val roundGrams = Math.round(gramsPerOneTime(catProperty.weight) * 10.0) / 10.0
+        botProperty.notificationUsers.forEach { user ->
+            bot.execute(SendMessage(user, "Ужин: $roundGrams граммов"))
+        }
     }
 
-    @Scheduled(cron = "0 8 7 * * ?")
+    @Scheduled(cron = "0 8 7 * * ?", zone = "PLT")
     fun scheduledMonthBirthday() {
-        val bot = TelegramBot(botProperty.token);
-        val age: Long = abs(Duration.between(LocalDate.now().atStartOfDay(), catProperty.dateOfBirth.atStartOfDay()).toDays() / 30.41.toInt());
-        bot.execute(SendMessage(320416029L, "Коту $age месяцев"));
+        val bot = TelegramBot(botProperty.token)
+        val age: Long = abs(Duration.between(LocalDate.now().atStartOfDay(), catProperty.dateOfBirth.atStartOfDay()).toDays() / 30.41.toInt())
+        botProperty.notificationUsers.forEach { user ->
+            bot.execute(SendMessage(user, "Коту $age месяцев"))
+        }
     }
 
-    @Scheduled(cron = "0 8 7 10 * ?")
+    @Scheduled(cron = "0 8 7 10 * ?", zone = "PLT")
     fun scheduledYearBirthday() {
-        val bot = TelegramBot(botProperty.token);
-        val age: Long = abs(Duration.between(LocalDate.now().atStartOfDay(), catProperty.dateOfBirth.atStartOfDay()).toDays() / 30.41.toInt()) / 12;
-        bot.execute(SendMessage(320416029L, "Коту исполнилось $age"));
+        val bot = TelegramBot(botProperty.token)
+        val age: Long = abs(Duration.between(LocalDate.now().atStartOfDay(), catProperty.dateOfBirth.atStartOfDay()).toDays() / 30.41.toInt()) / 12
+        botProperty.notificationUsers.forEach { user ->
+            bot.execute(SendMessage(user, "Коту исполнилось $age"))
+        }
     }
 
     private fun gramsPerOneTime(weight: Double): Double {
-        val timePerDay = 3;
-        val kcalInOneGram = 4;
-        return (dailyNormKilocalories(weight) / timePerDay) / kcalInOneGram;
+        val timePerDay = 3
+        val kcalInOneGram = 4
+        return (dailyNormKilocalories(weight) / timePerDay) / kcalInOneGram
     }
 
     private fun dailyNormKilocalories(weight: Double): Double {
-        return 1.4 * ((30 * weight) + 70);
+        return 1.4 * ((30 * weight) + 70)
     }
 }

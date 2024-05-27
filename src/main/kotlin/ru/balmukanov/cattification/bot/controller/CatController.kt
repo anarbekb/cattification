@@ -18,7 +18,6 @@ class CatController(private val botProperty: BotProperty) : TelegramMvcControlle
 
     @BotRequest(value = ["/meow"], type = [MessageType.CALLBACK_QUERY, MessageType.MESSAGE])
     fun meow(user: User, chat: Chat): SendMessage {
-        println(chat.id());
         return SendMessage(chat.id(), "Meow");
     }
 }

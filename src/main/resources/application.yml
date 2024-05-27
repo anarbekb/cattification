@@ -2,6 +2,7 @@ spring.application.name: cattification
 
 bot:
   token: ${BOT_TOKEN}
+  notification-users: ${NOTIFICATION_USERS}
 
 cat:
   weight: 2.2
