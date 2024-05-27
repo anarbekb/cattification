@@ -1,0 +1,8 @@
+spring.application.name: cattification
+
+bot:
+  token: ${BOT_TOKEN}
+
+cat:
+  weight: 2.2
+  date-of-birth: 2023-10-07
